@@ -5,6 +5,7 @@ import { Search } from "lucide-react";
 import { StoreLayout } from "@/components/StoreLayout";
 import { ProductCard, type Product } from "@/components/ProductCard";
 import { apiGet } from "@/lib/api";
+import { withDemoFallback } from "@/lib/demo-products";
 
 type ShopSearch = { style?: string; category?: string; q?: string; sort?: string };
 
