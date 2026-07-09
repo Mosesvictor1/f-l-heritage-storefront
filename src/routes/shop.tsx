@@ -1,7 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
-import { Search } from "lucide-react";
+import { Search, Loader2 } from "lucide-react";
 import { StoreLayout } from "@/components/StoreLayout";
 import { ProductCard, type Product } from "@/components/ProductCard";
 import { apiGet } from "@/lib/api";
