@@ -35,15 +35,28 @@ function ShopPage() {
   const { data, isLoading } = useQuery({
     queryKey: ["products", "list", search],
     queryFn: async () => {
-      const r = await apiGet<Product[] | { products?: Product[] }>("products", {
-        style: search.style,
-        category: search.category,
-        q: search.q,
-        sort: search.sort,
-      });
-      const d = r.data as any;
-      return (Array.isArray(d) ? d : d?.products || []) as Product[];
+      try {
+        const r = await apiGet<Product[] | { products?: Product[] }>("products", {
+          style: search.style,
+          category: search.category,
+          q: search.q,
+          sort: search.sort,
+        });
+        const d = r.data as unknown;
+        const list = Array.isArray(d)
+          ? (d as Product[])
+          : ((d as { products?: Product[] } | null | undefined)?.products ?? []);
+        return list;
+      } catch {
+        return [] as Product[];
+      }
     },
+  });
+
+  const displayList = withDemoFallback(data, {
+    style: search.style,
+    category: search.category,
+    q: search.q,
   });
 
   const setSearch = (patch: Partial<ShopSearch>) => {
