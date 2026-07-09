@@ -14,7 +14,8 @@ export const Route = createFileRoute("/products/$id")({
 });
 
 interface Review {
-  id: string;
+  id?: string;
+  reviewId?: string;
   customerName: string;
   rating: number;
   review: string;
@@ -45,9 +46,9 @@ function ProductPage() {
   const { data: reviews, refetch: refetchReviews } = useQuery({
     queryKey: ["reviews", id],
     queryFn: async () => {
-      const r = await apiGet<Review[] | { reviews?: Review[] }>("reviews", { productId: id, status: "approved" });
+      const r = await apiGet<Review[] | { reviews?: Review[] } | { items?: Review[] }>("reviews", { productId: id, status: "approved" });
       const d = r.data as any;
-      const list = (Array.isArray(d) ? d : d?.reviews || []) as Review[];
+      const list = (Array.isArray(d) ? d : d?.items || d?.reviews || []) as Review[];
       return list.filter((r) => (r.status || "approved") === "approved");
     },
   });
@@ -163,7 +164,7 @@ function ProductPage() {
                 <p className="text-muted-foreground">No reviews yet. Be the first to review.</p>
               )}
               {reviews?.map((r) => (
-                <div key={r.id} className="rounded-2xl border border-border p-5 bg-card">
+                <div key={r.reviewId || r.id} className="rounded-2xl border border-border p-5 bg-card">
                   <div className="flex items-center gap-2">
                     {Array.from({ length: 5 }).map((_, i) => (
                       <Star key={i} className={`h-4 w-4 ${i < r.rating ? "fill-secondary text-secondary" : "text-muted-foreground/40"}`} />
