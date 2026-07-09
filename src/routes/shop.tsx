@@ -1,7 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
-import { Search } from "lucide-react";
+import { Search, Loader2 } from "lucide-react";
 import { StoreLayout } from "@/components/StoreLayout";
 import { ProductCard, type Product } from "@/components/ProductCard";
 import { apiGet } from "@/lib/api";
@@ -115,10 +115,9 @@ function ShopPage() {
 
       <section className="mx-auto max-w-7xl px-4 sm:px-6 py-12">
         {isLoading ? (
-          <div className="grid gap-6 grid-cols-2 lg:grid-cols-4">
-            {Array.from({ length: 8 }).map((_, i) => (
-              <div key={i} className="aspect-square rounded-2xl bg-muted animate-pulse" />
-            ))}
+          <div className="flex w-full flex-col items-center justify-center gap-3 py-24">
+            <Loader2 className="h-9 w-9 animate-spin text-primary" />
+            <span className="text-sm text-muted-foreground">Loading products…</span>
           </div>
         ) : displayList.length > 0 ? (
           <div className="grid gap-6 grid-cols-2 lg:grid-cols-4">
