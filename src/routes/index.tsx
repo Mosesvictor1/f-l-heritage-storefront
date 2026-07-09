@@ -138,7 +138,7 @@ function HomePage() {
         </div>
 
         {/* Content */}
-        <div className="relative mx-auto flex min-h-[92vh] max-w-7xl flex-col justify-center px-4 sm:px-6 lg:px-10 py-24">
+        <div className="relative mx-auto flex min-h-[62vh] max-w-7xl flex-col justify-center px-4 sm:px-6 lg:px-10 py-16">
           <div className="max-w-2xl">
             <span className="inline-flex items-center gap-2 rounded-full border border-secondary/40 bg-secondary/10 px-4 py-1.5 text-[11px] font-medium uppercase tracking-[0.25em] text-secondary backdrop-blur">
               <Sparkles className="h-3 w-3" />
