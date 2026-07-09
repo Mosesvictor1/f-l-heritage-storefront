@@ -120,14 +120,15 @@ function ShopPage() {
               <div key={i} className="aspect-square rounded-2xl bg-muted animate-pulse" />
             ))}
           </div>
-        ) : data && data.length > 0 ? (
+        ) : displayList.length > 0 ? (
           <div className="grid gap-6 grid-cols-2 lg:grid-cols-4">
-            {data.map((p) => <ProductCard key={p.id} p={p} />)}
+            {displayList.map((p) => <ProductCard key={p.id} p={p} />)}
           </div>
         ) : (
           <p className="text-center text-muted-foreground py-20">No products found.</p>
         )}
       </section>
+
     </StoreLayout>
   );
 }
