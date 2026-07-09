@@ -8,7 +8,9 @@ import { apiGet } from "@/lib/api";
 import { withDemoFallback } from "@/lib/demo-products";
 import heroFila1 from "@/assets/hero-fila-1.jpg";
 import heroFila2 from "@/assets/hero-fila-2.jpg";
-import heroFila3 from "@/assets/hero-fila-3.jpg";
+import heroFila4 from "@/assets/hero-fila-4.jpg";
+import heroFila5 from "@/assets/hero-fila-5.jpg";
+import heroFila6 from "@/assets/hero-fila-6.jpg";
 
 export const Route = createFileRoute("/")({
   component: HomePage,
@@ -17,7 +19,9 @@ export const Route = createFileRoute("/")({
 const HERO_IMAGES = [
   { src: heroFila1, alt: "Yoruba gentleman wearing a navy velvet Fìlá Òóduá cap with gold embroidery" },
   { src: heroFila2, alt: "Young Yoruba man wearing a burgundy soft-band Fìlá Òóduá cap" },
-  { src: heroFila3, alt: "Yoruba elder statesman wearing an emerald hand-netted Fìlá Òóduá cap" },
+  { src: heroFila4, alt: "Distinguished Yoruba man wearing a royal purple velvet Fìlá with gold embroidery" },
+  { src: heroFila5, alt: "Stylish young Yoruba man wearing a forest green aso-oke Fìlá" },
+  { src: heroFila6, alt: "Regal Yoruba chief wearing a wine red Fìlá Abetí Ajá with coral beads" },
 ];
 
 const STYLES = [
@@ -84,7 +88,7 @@ function HomePage() {
   return (
     <StoreLayout>
       {/* ============ PREMIUM HERO ============ */}
-      <section className="relative min-h-[92vh] w-full overflow-hidden bg-primary text-primary-foreground">
+      <section className="relative min-h-[62vh] w-full overflow-hidden bg-primary text-primary-foreground">
         {/* Rotating hero images with smooth crossfade */}
         {HERO_IMAGES.map((img, i) => (
           <img
@@ -100,9 +104,9 @@ function HomePage() {
           />
         ))}
 
-        {/* Luxury gradient overlays */}
-        <div className="absolute inset-0 bg-gradient-to-r from-primary/95 via-primary/75 to-primary/10" />
-        <div className="absolute inset-0 bg-gradient-to-t from-primary/70 via-transparent to-primary/40" />
+        {/* Luxury gradient overlays — lighter so images show through */}
+        <div className="absolute inset-0 bg-gradient-to-r from-primary/75 via-primary/40 to-transparent" />
+        <div className="absolute inset-0 bg-gradient-to-t from-primary/40 via-transparent to-primary/15" />
 
         {/* Subtle floating Yoruba-inspired decorative patterns */}
         <div aria-hidden className="pointer-events-none absolute inset-0 overflow-hidden">
