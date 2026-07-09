@@ -7,6 +7,7 @@ import { StoreLayout } from "@/components/StoreLayout";
 import { apiGet, apiPost, formatNaira } from "@/lib/api";
 import type { Product } from "@/components/ProductCard";
 import { useCart } from "@/lib/cart";
+import { DEMO_PRODUCTS } from "@/lib/demo-products";
 
 export const Route = createFileRoute("/products/$id")({
   component: ProductPage,
