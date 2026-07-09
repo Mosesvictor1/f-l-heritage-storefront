@@ -46,7 +46,7 @@ function ShopPage() {
   });
 
   const setSearch = (patch: Partial<ShopSearch>) => {
-    navigate({ search: (prev) => ({ ...prev, ...patch }) });
+    navigate({ search: (prev: ShopSearch) => ({ ...prev, ...patch }) });
   };
 
   return (
