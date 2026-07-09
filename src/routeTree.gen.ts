@@ -15,6 +15,7 @@ import { Route as CheckoutRouteImport } from './routes/checkout'
 import { Route as CartRouteImport } from './routes/cart'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as ProductsIdRouteImport } from './routes/products.$id'
+import { Route as AdminLoginRouteImport } from './routes/admin.login'
 
 const ShopRoute = ShopRouteImport.update({
   id: '/shop',
@@ -46,6 +47,11 @@ const ProductsIdRoute = ProductsIdRouteImport.update({
   path: '/products/$id',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AdminLoginRoute = AdminLoginRouteImport.update({
+  id: '/admin/login',
+  path: '/admin/login',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -53,6 +59,7 @@ export interface FileRoutesByFullPath {
   '/checkout': typeof CheckoutRoute
   '/order-lookup': typeof OrderLookupRoute
   '/shop': typeof ShopRoute
+  '/admin/login': typeof AdminLoginRoute
   '/products/$id': typeof ProductsIdRoute
 }
 export interface FileRoutesByTo {
@@ -61,6 +68,7 @@ export interface FileRoutesByTo {
   '/checkout': typeof CheckoutRoute
   '/order-lookup': typeof OrderLookupRoute
   '/shop': typeof ShopRoute
+  '/admin/login': typeof AdminLoginRoute
   '/products/$id': typeof ProductsIdRoute
 }
 export interface FileRoutesById {
@@ -70,6 +78,7 @@ export interface FileRoutesById {
   '/checkout': typeof CheckoutRoute
   '/order-lookup': typeof OrderLookupRoute
   '/shop': typeof ShopRoute
+  '/admin/login': typeof AdminLoginRoute
   '/products/$id': typeof ProductsIdRoute
 }
 export interface FileRouteTypes {
@@ -80,9 +89,17 @@ export interface FileRouteTypes {
     | '/checkout'
     | '/order-lookup'
     | '/shop'
+    | '/admin/login'
     | '/products/$id'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/cart' | '/checkout' | '/order-lookup' | '/shop' | '/products/$id'
+  to:
+    | '/'
+    | '/cart'
+    | '/checkout'
+    | '/order-lookup'
+    | '/shop'
+    | '/admin/login'
+    | '/products/$id'
   id:
     | '__root__'
     | '/'
@@ -90,6 +107,7 @@ export interface FileRouteTypes {
     | '/checkout'
     | '/order-lookup'
     | '/shop'
+    | '/admin/login'
     | '/products/$id'
   fileRoutesById: FileRoutesById
 }
@@ -99,6 +117,7 @@ export interface RootRouteChildren {
   CheckoutRoute: typeof CheckoutRoute
   OrderLookupRoute: typeof OrderLookupRoute
   ShopRoute: typeof ShopRoute
+  AdminLoginRoute: typeof AdminLoginRoute
   ProductsIdRoute: typeof ProductsIdRoute
 }
 
@@ -146,6 +165,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ProductsIdRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/admin/login': {
+      id: '/admin/login'
+      path: '/admin/login'
+      fullPath: '/admin/login'
+      preLoaderRoute: typeof AdminLoginRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -155,6 +181,7 @@ const rootRouteChildren: RootRouteChildren = {
   CheckoutRoute: CheckoutRoute,
   OrderLookupRoute: OrderLookupRoute,
   ShopRoute: ShopRoute,
+  AdminLoginRoute: AdminLoginRoute,
   ProductsIdRoute: ProductsIdRoute,
 }
 export const routeTree = rootRouteImport
