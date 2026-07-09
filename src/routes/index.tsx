@@ -8,7 +8,9 @@ import { apiGet } from "@/lib/api";
 import { withDemoFallback } from "@/lib/demo-products";
 import heroFila1 from "@/assets/hero-fila-1.jpg";
 import heroFila2 from "@/assets/hero-fila-2.jpg";
-import heroFila3 from "@/assets/hero-fila-3.jpg";
+import heroFila4 from "@/assets/hero-fila-4.jpg";
+import heroFila5 from "@/assets/hero-fila-5.jpg";
+import heroFila6 from "@/assets/hero-fila-6.jpg";
 
 export const Route = createFileRoute("/")({
   component: HomePage,
@@ -17,7 +19,9 @@ export const Route = createFileRoute("/")({
 const HERO_IMAGES = [
   { src: heroFila1, alt: "Yoruba gentleman wearing a navy velvet Fìlá Òóduá cap with gold embroidery" },
   { src: heroFila2, alt: "Young Yoruba man wearing a burgundy soft-band Fìlá Òóduá cap" },
-  { src: heroFila3, alt: "Yoruba elder statesman wearing an emerald hand-netted Fìlá Òóduá cap" },
+  { src: heroFila4, alt: "Distinguished Yoruba man wearing a royal purple velvet Fìlá with gold embroidery" },
+  { src: heroFila5, alt: "Stylish young Yoruba man wearing a forest green aso-oke Fìlá" },
+  { src: heroFila6, alt: "Regal Yoruba chief wearing a wine red Fìlá Abetí Ajá with coral beads" },
 ];
 
 const STYLES = [
@@ -84,7 +88,7 @@ function HomePage() {
   return (
     <StoreLayout>
       {/* ============ PREMIUM HERO ============ */}
-      <section className="relative min-h-[92vh] w-full overflow-hidden bg-primary text-primary-foreground">
+      <section className="relative min-h-[62vh] w-full overflow-hidden bg-primary text-primary-foreground">
         {/* Rotating hero images with smooth crossfade */}
         {HERO_IMAGES.map((img, i) => (
           <img
@@ -100,9 +104,9 @@ function HomePage() {
           />
         ))}
 
-        {/* Luxury gradient overlays */}
-        <div className="absolute inset-0 bg-gradient-to-r from-primary/95 via-primary/75 to-primary/10" />
-        <div className="absolute inset-0 bg-gradient-to-t from-primary/70 via-transparent to-primary/40" />
+        {/* Luxury gradient overlays — lighter so images show through */}
+        <div className="absolute inset-0 bg-gradient-to-r from-primary/75 via-primary/40 to-transparent" />
+        <div className="absolute inset-0 bg-gradient-to-t from-primary/40 via-transparent to-primary/15" />
 
         {/* Subtle floating Yoruba-inspired decorative patterns */}
         <div aria-hidden className="pointer-events-none absolute inset-0 overflow-hidden">
@@ -134,26 +138,26 @@ function HomePage() {
         </div>
 
         {/* Content */}
-        <div className="relative mx-auto flex min-h-[92vh] max-w-7xl flex-col justify-center px-4 sm:px-6 lg:px-10 py-24">
+        <div className="relative mx-auto flex min-h-[62vh] max-w-7xl flex-col justify-center px-4 sm:px-6 lg:px-10 py-16">
           <div className="max-w-2xl">
             <span className="inline-flex items-center gap-2 rounded-full border border-secondary/40 bg-secondary/10 px-4 py-1.5 text-[11px] font-medium uppercase tracking-[0.25em] text-secondary backdrop-blur">
               <Sparkles className="h-3 w-3" />
               Handcrafted Yoruba Heritage
             </span>
 
-            <h1 className="mt-8 font-display text-5xl leading-[1.02] font-bold tracking-tight sm:text-6xl md:text-7xl lg:text-[5.25rem]">
+            <h1 className="mt-6 font-display text-4xl leading-[1.02] font-bold tracking-tight sm:text-5xl md:text-6xl lg:text-7xl">
               Wear Your Heritage.
               <span className="mt-2 block bg-gradient-to-r from-secondary via-secondary to-secondary/70 bg-clip-text text-transparent">
                 Make a Statement.
               </span>
             </h1>
 
-            <p className="mt-8 max-w-xl text-base leading-relaxed text-primary-foreground/85 sm:text-lg">
+            <p className="mt-5 max-w-xl text-base leading-relaxed text-primary-foreground/85 sm:text-lg">
               Premium Yoruba <em className="not-italic font-medium text-secondary">Fìlá</em> —
               celebrating culture, elegance, and centuries of craftsmanship in every stitch.
             </p>
 
-            <div className="mt-12 flex flex-wrap items-center gap-4">
+            <div className="mt-8 flex flex-wrap items-center gap-4">
               <Link
                 to="/shop"
                 className="group inline-flex items-center gap-2 rounded-full bg-secondary px-9 py-4 text-sm font-semibold tracking-wide text-secondary-foreground shadow-2xl shadow-secondary/30 transition-all duration-300 hover:-translate-y-0.5 hover:shadow-secondary/50"
@@ -170,7 +174,7 @@ function HomePage() {
             </div>
 
             {/* Small brand tag row */}
-            <div className="mt-14 hidden items-center gap-6 text-[11px] uppercase tracking-[0.3em] text-primary-foreground/60 sm:flex">
+            <div className="mt-9 hidden items-center gap-6 text-[11px] uppercase tracking-[0.3em] text-primary-foreground/60 sm:flex">
               <span>Est. Heritage</span>
               <span className="h-px w-8 bg-primary-foreground/30" />
               <span>Master Artisans</span>
