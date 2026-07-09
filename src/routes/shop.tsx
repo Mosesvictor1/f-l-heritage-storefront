@@ -5,6 +5,7 @@ import { Search } from "lucide-react";
 import { StoreLayout } from "@/components/StoreLayout";
 import { ProductCard, type Product } from "@/components/ProductCard";
 import { apiGet } from "@/lib/api";
+import { withDemoFallback } from "@/lib/demo-products";
 
 type ShopSearch = { style?: string; category?: string; q?: string; sort?: string };
 
@@ -34,15 +35,28 @@ function ShopPage() {
   const { data, isLoading } = useQuery({
     queryKey: ["products", "list", search],
     queryFn: async () => {
-      const r = await apiGet<Product[] | { products?: Product[] }>("products", {
-        style: search.style,
-        category: search.category,
-        q: search.q,
-        sort: search.sort,
-      });
-      const d = r.data as any;
-      return (Array.isArray(d) ? d : d?.products || []) as Product[];
+      try {
+        const r = await apiGet<Product[] | { products?: Product[] }>("products", {
+          style: search.style,
+          category: search.category,
+          q: search.q,
+          sort: search.sort,
+        });
+        const d = r.data as unknown;
+        const list = Array.isArray(d)
+          ? (d as Product[])
+          : ((d as { products?: Product[] } | null | undefined)?.products ?? []);
+        return list;
+      } catch {
+        return [] as Product[];
+      }
     },
+  });
+
+  const displayList = withDemoFallback(data, {
+    style: search.style,
+    category: search.category,
+    q: search.q,
   });
 
   const setSearch = (patch: Partial<ShopSearch>) => {
@@ -106,14 +120,15 @@ function ShopPage() {
               <div key={i} className="aspect-square rounded-2xl bg-muted animate-pulse" />
             ))}
           </div>
-        ) : data && data.length > 0 ? (
+        ) : displayList.length > 0 ? (
           <div className="grid gap-6 grid-cols-2 lg:grid-cols-4">
-            {data.map((p) => <ProductCard key={p.id} p={p} />)}
+            {displayList.map((p) => <ProductCard key={p.id} p={p} />)}
           </div>
         ) : (
           <p className="text-center text-muted-foreground py-20">No products found.</p>
         )}
       </section>
+
     </StoreLayout>
   );
 }

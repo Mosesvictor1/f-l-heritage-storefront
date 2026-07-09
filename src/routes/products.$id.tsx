@@ -7,6 +7,7 @@ import { StoreLayout } from "@/components/StoreLayout";
 import { apiGet, apiPost, formatNaira } from "@/lib/api";
 import type { Product } from "@/components/ProductCard";
 import { useCart } from "@/lib/cart";
+import { DEMO_PRODUCTS } from "@/lib/demo-products";
 
 export const Route = createFileRoute("/products/$id")({
   component: ProductPage,
@@ -30,8 +31,14 @@ function ProductPage() {
   const { data: product, isLoading } = useQuery({
     queryKey: ["product", id],
     queryFn: async () => {
-      const r = await apiGet<Product>("products", { id });
-      return r.data as Product;
+      try {
+        const r = await apiGet<Product>("products", { id });
+        if (r?.data) return r.data as Product;
+      } catch {
+        // fall through to demo fallback
+      }
+      const demo = DEMO_PRODUCTS.find((p) => p.id === id);
+      return (demo ?? null) as Product | null;
     },
   });
 
