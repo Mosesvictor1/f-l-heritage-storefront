@@ -214,6 +214,49 @@ function ProductPage() {
               </div>
             )}
 
+            {SIZE_OPTIONS.length > 0 && (
+              <div className="mt-6">
+                <div className="flex items-center justify-between">
+                  <label className="text-xs uppercase tracking-widest text-primary font-semibold">
+                    Select Size
+                  </label>
+                  <button
+                    type="button"
+                    onClick={() => setShowSizeChart(true)}
+                    className="inline-flex items-center gap-1 text-xs font-semibold text-primary hover:underline"
+                  >
+                    <Ruler className="h-3.5 w-3.5" /> Size chart
+                  </button>
+                </div>
+                <div className="mt-2 flex flex-wrap gap-2">
+                  {SIZE_OPTIONS.map((s) => {
+                    const active = selectedSize === s;
+                    return (
+                      <button
+                        type="button"
+                        key={s}
+                        onClick={() => setSelectedSize(s)}
+                        className={`min-w-[3rem] rounded-full border px-4 py-2 text-sm font-semibold transition ${
+                          active
+                            ? "border-primary bg-primary text-primary-foreground"
+                            : "border-border bg-card hover:border-primary/50"
+                        }`}
+                      >
+                        {s}
+                      </button>
+                    );
+                  })}
+                </div>
+                {selectedSize && (
+                  <p className="mt-2 text-xs text-muted-foreground">
+                    You selected size <span className="font-semibold text-foreground">{selectedSize}</span>.
+                  </p>
+                )}
+              </div>
+            )}
+
+
+
             <div className="mt-8 flex items-center gap-4">
               <div className="inline-flex items-center rounded-full border border-border">
                 <button onClick={() => setQty((q) => Math.max(1, q - 1))} className="p-3 hover:bg-muted rounded-l-full"><Minus className="h-4 w-4" /></button>
