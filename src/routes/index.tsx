@@ -242,7 +242,7 @@ function HomePage() {
         <div className="mx-auto max-w-7xl px-4 sm:px-6">
           <div className="flex items-end justify-between flex-wrap gap-4">
             <div>
-              <span className="text-xs font-semibold uppercase tracking-widest text-primary">Our Signature Styles</span>
+              <span className="text-xl font-semibold uppercase tracking-widest text-primary">Our Signature Styles</span>
             </div>
             <Link to="/shop" className="text-sm font-semibold text-primary inline-flex items-center gap-1 hover:gap-2 transition-all">
               See all <ArrowRight className="h-4 w-4" />
