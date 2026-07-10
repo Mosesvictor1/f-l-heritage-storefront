@@ -220,20 +220,28 @@ function HomePage() {
         </a>
       </section>
 
-      {/* Trust bar */}
+      {/* Trust bar — horizontal scroll, icon up / text down */}
       <section className="border-b border-border/60 bg-background">
-        <div className="mx-auto grid max-w-7xl gap-8 px-4 py-12 text-center sm:grid-cols-3 sm:px-6">
-          {[
-            { icon: Award, title: "Master Craftsmanship", desc: "Handmade by Yoruba artisans" },
-            { icon: Sparkles, title: "Premium Materials", desc: "Only the finest fabrics" },
-            { icon: Truck, title: "Nationwide Delivery", desc: "Fast, tracked shipping" },
-          ].map((f) => (
-            <div key={f.title} className="flex flex-col items-center">
-              <f.icon className="h-6 w-6 text-primary" />
-              <div className="mt-3 font-display font-semibold">{f.title}</div>
-              <div className="text-sm text-muted-foreground">{f.desc}</div>
-            </div>
-          ))}
+        <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6">
+          <div className="flex gap-4 overflow-x-auto pb-2 pt-2 snap-x snap-mandatory [scrollbar-width:none] [-ms-overflow-style:none]">
+            {[
+              { icon: Award, title: "Master Craftsmanship", desc: "Handmade by Yoruba artisans" },
+              { icon: Sparkles, title: "Premium Materials", desc: "Only the finest fabrics" },
+              { icon: Truck, title: "Nationwide Delivery", desc: "Fast, tracked shipping" },
+              { icon: Scissors, title: "Custom Orders Available", desc: "Made to your style" },
+            ].map((f) => (
+              <div
+                key={f.title}
+                className="group min-w-[140px] flex-1 snap-start flex flex-col items-center justify-start rounded-xl border border-border/40 bg-muted/30 px-3 py-4 text-center transition hover:border-primary/30 hover:bg-muted/50"
+              >
+                <div className="grid h-10 w-10 place-items-center rounded-full bg-primary/10 text-primary">
+                  <f.icon className="h-5 w-5" />
+                </div>
+                <div className="mt-2 text-xs font-semibold leading-tight">{f.title}</div>
+                <div className="mt-1 text-[10px] text-muted-foreground leading-tight">{f.desc}</div>
+              </div>
+            ))}
+          </div>
         </div>
       </section>
 
