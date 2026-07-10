@@ -251,16 +251,17 @@ function ProductPage() {
                   <option value="">Choose a style…</option>
                   {STYLE_OPTIONS.map((name) => {
                     const sp = stylePriceFor(name);
+                    const label = styleLabelFor(name);
                     return (
                       <option key={name} value={name}>
-                        {name}{sp != null ? ` — ${formatNaira(sp)}` : ""}
+                        {label}{sp != null ? ` — ${formatNaira(sp)}` : ""}
                       </option>
                     );
                   })}
                 </select>
                 {selectedStyle && (
                   <p className="mt-2 text-xs text-muted-foreground">
-                    You selected <span className="font-semibold text-foreground">{selectedStyle}</span>
+                    You selected <span className="font-semibold text-foreground">{styleLabelFor(selectedStyle)}</span>
                     {selectedStylePrice != null && (
                       <> at <span className="font-semibold text-primary">{formatNaira(selectedStylePrice)}</span></>
                     )}.
