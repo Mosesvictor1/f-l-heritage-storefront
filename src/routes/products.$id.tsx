@@ -316,9 +316,61 @@ function ProductPage() {
           </div>
         </section>
       </div>
+
+      {showSizeChart && (
+        <div
+          className="fixed inset-0 z-50 grid place-items-center bg-black/70 p-4"
+          onClick={() => setShowSizeChart(false)}
+        >
+          <div
+            className="w-full max-w-md overflow-hidden rounded-3xl border-y-4 border-secondary bg-background shadow-2xl"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="flex items-center justify-between px-5 py-4 border-b border-border">
+              <h3 className="font-display text-xl font-bold tracking-wide">SIZE CHART</h3>
+              <button
+                type="button"
+                onClick={() => setShowSizeChart(false)}
+                className="rounded-full p-1.5 hover:bg-muted"
+                aria-label="Close size chart"
+              >
+                <X className="h-4 w-4" />
+              </button>
+            </div>
+            <div className="p-5">
+              <div className="grid grid-cols-3 gap-2 rounded-xl bg-card px-4 py-3 text-sm font-semibold uppercase tracking-widest text-primary">
+                <div>Size</div>
+                <div className="text-center">Inches</div>
+                <div className="text-right">CM</div>
+              </div>
+              <ul className="mt-2 divide-y divide-border/60">
+                {SIZE_CHART.map((row) => {
+                  const active = selectedSize === row.size;
+                  return (
+                    <li
+                      key={row.size}
+                      className={`grid grid-cols-3 items-center gap-2 px-4 py-3 text-sm ${
+                        active ? "bg-primary/10 rounded-lg" : ""
+                      }`}
+                    >
+                      <span className="font-bold">{row.size}</span>
+                      <span className="text-center tabular-nums">{row.inches}</span>
+                      <span className="text-right tabular-nums">{row.cm}</span>
+                    </li>
+                  );
+                })}
+              </ul>
+              <p className="mt-4 text-xs text-muted-foreground">
+                Measurements are head circumference. Choose the size closest to your measurement.
+              </p>
+            </div>
+          </div>
+        </div>
+      )}
     </StoreLayout>
   );
 }
+
 
 function ReviewForm({ productId, onSubmitted }: { productId: string; onSubmitted: () => void }) {
   const [name, setName] = useState("");
