@@ -1,7 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
-import { ArrowRight, Sparkles, Award, Truck, ChevronDown, Loader2 } from "lucide-react";
+import { ArrowRight, Sparkles, Award, Truck, Loader2, Scissors } from "lucide-react";
 import { StoreLayout, useSettings } from "@/components/StoreLayout";
 import { ProductCard, type Product } from "@/components/ProductCard";
 import { apiGet } from "@/lib/api";
