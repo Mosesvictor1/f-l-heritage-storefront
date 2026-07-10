@@ -2,7 +2,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
 import { toast } from "sonner";
-import { Star, Minus, Plus, ArrowLeft, ShoppingBag, ArrowRight } from "lucide-react";
+import { Star, Minus, Plus, ArrowLeft, ShoppingBag, ArrowRight, Ruler, X } from "lucide-react";
 import { StoreLayout } from "@/components/StoreLayout";
 import { apiGet, apiPost, formatNaira } from "@/lib/api";
 import type { Product } from "@/components/ProductCard";
@@ -29,6 +29,8 @@ function ProductPage() {
   const [qty, setQty] = useState(1);
   const [imgIdx, setImgIdx] = useState(0);
   const [selectedStyle, setSelectedStyle] = useState<string>("");
+  const [selectedSize, setSelectedSize] = useState<string>("");
+  const [showSizeChart, setShowSizeChart] = useState(false);
 
   const { data: product, isLoading } = useQuery({
     queryKey: ["product", id],
@@ -85,8 +87,11 @@ function ProductPage() {
   const displayPrice = hasSale ? Number(product.salePrice) : Number(product.price);
   const stock = Number(product.stock ?? 0);
   const inStock = stock > 0;
-  const cartLookupId = selectedStyle ? `${product.id}::${selectedStyle}` : product.id;
-  const inCart = items.find((i) => i.id === cartLookupId || i.id === product.id || i.id.startsWith(`${product.id}::`));
+  const cartKeyParts = [product.id, selectedStyle, selectedSize].filter(Boolean);
+  const cartLookupId = cartKeyParts.join("::");
+  const inCart = items.find(
+    (i) => i.id === cartLookupId || i.id === product.id || i.id.startsWith(`${product.id}::`),
+  );
 
   // Styles available for THIS product — sourced from the API (array or comma-separated).
   // Falls back to the product's single `style` field if present.
@@ -101,12 +106,40 @@ function ProductPage() {
     .map((s: string) => String(s).trim())
     .filter(Boolean);
 
+  // Sizes available for THIS product — sourced from the API (array or comma-separated).
+  // Falls back to the standard Fìlá size run.
+  const rawSizes = (product as any).sizes;
+  const apiSizes: string[] = (
+    Array.isArray(rawSizes)
+      ? rawSizes
+      : typeof rawSizes === "string" && rawSizes.trim()
+        ? rawSizes.split(",")
+        : []
+  )
+    .map((s: string) => String(s).trim())
+    .filter(Boolean);
+  const SIZE_OPTIONS: string[] =
+    apiSizes.length > 0 ? apiSizes : ["XS", "S", "M", "L", "XL", "XXL", "XXXL"];
+  const SIZE_CHART: Array<{ size: string; inches: string; cm: string }> = [
+    { size: "XS", inches: "22.0", cm: "55.9" },
+    { size: "S", inches: "22.5", cm: "57.2" },
+    { size: "M", inches: "23.0", cm: "58.4" },
+    { size: "L", inches: "23.5", cm: "59.7" },
+    { size: "XL", inches: "24.0", cm: "61.0" },
+    { size: "XXL", inches: "24.5", cm: "62.2" },
+    { size: "XXXL", inches: "25.0", cm: "63.5" },
+  ];
+
   const addToCart = () => {
     if (!inStock) return toast.error("Out of stock");
     const style = selectedStyle || (STYLE_OPTIONS.length === 1 ? STYLE_OPTIONS[0] : "");
     if (STYLE_OPTIONS.length > 0 && !style) return toast.error("Please select a style");
-    const displayName = style ? `${product.name} — ${style}` : product.name;
-    const cartId = style ? `${product.id}::${style}` : product.id;
+    if (SIZE_OPTIONS.length > 0 && !selectedSize) return toast.error("Please select a size");
+    const size = selectedSize;
+    const suffixParts = [style, size].filter(Boolean);
+    const displayName = suffixParts.length ? `${product.name} — ${suffixParts.join(" / ")}` : product.name;
+    const idParts = [product.id, style, size].filter(Boolean);
+    const cartId = idParts.join("::");
     add({ id: cartId, name: displayName, price: displayPrice, image: images[0], stock }, qty);
     toast.success(`Added ${qty} × ${displayName} to cart`);
   };
@@ -181,6 +214,49 @@ function ProductPage() {
               </div>
             )}
 
+            {SIZE_OPTIONS.length > 0 && (
+              <div className="mt-6">
+                <div className="flex items-center justify-between">
+                  <label className="text-xs uppercase tracking-widest text-primary font-semibold">
+                    Select Size
+                  </label>
+                  <button
+                    type="button"
+                    onClick={() => setShowSizeChart(true)}
+                    className="inline-flex items-center gap-1 text-xs font-semibold text-primary hover:underline"
+                  >
+                    <Ruler className="h-3.5 w-3.5" /> Size chart
+                  </button>
+                </div>
+                <div className="mt-2 flex flex-wrap gap-2">
+                  {SIZE_OPTIONS.map((s) => {
+                    const active = selectedSize === s;
+                    return (
+                      <button
+                        type="button"
+                        key={s}
+                        onClick={() => setSelectedSize(s)}
+                        className={`min-w-[3rem] rounded-full border px-4 py-2 text-sm font-semibold transition ${
+                          active
+                            ? "border-primary bg-primary text-primary-foreground"
+                            : "border-border bg-card hover:border-primary/50"
+                        }`}
+                      >
+                        {s}
+                      </button>
+                    );
+                  })}
+                </div>
+                {selectedSize && (
+                  <p className="mt-2 text-xs text-muted-foreground">
+                    You selected size <span className="font-semibold text-foreground">{selectedSize}</span>.
+                  </p>
+                )}
+              </div>
+            )}
+
+
+
             <div className="mt-8 flex items-center gap-4">
               <div className="inline-flex items-center rounded-full border border-border">
                 <button onClick={() => setQty((q) => Math.max(1, q - 1))} className="p-3 hover:bg-muted rounded-l-full"><Minus className="h-4 w-4" /></button>
@@ -240,9 +316,61 @@ function ProductPage() {
           </div>
         </section>
       </div>
+
+      {showSizeChart && (
+        <div
+          className="fixed inset-0 z-50 grid place-items-center bg-black/70 p-4"
+          onClick={() => setShowSizeChart(false)}
+        >
+          <div
+            className="w-full max-w-md overflow-hidden rounded-3xl border-y-4 border-secondary bg-background shadow-2xl"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="flex items-center justify-between px-5 py-4 border-b border-border">
+              <h3 className="font-display text-xl font-bold tracking-wide">SIZE CHART</h3>
+              <button
+                type="button"
+                onClick={() => setShowSizeChart(false)}
+                className="rounded-full p-1.5 hover:bg-muted"
+                aria-label="Close size chart"
+              >
+                <X className="h-4 w-4" />
+              </button>
+            </div>
+            <div className="p-5">
+              <div className="grid grid-cols-3 gap-2 rounded-xl bg-card px-4 py-3 text-sm font-semibold uppercase tracking-widest text-primary">
+                <div>Size</div>
+                <div className="text-center">Inches</div>
+                <div className="text-right">CM</div>
+              </div>
+              <ul className="mt-2 divide-y divide-border/60">
+                {SIZE_CHART.map((row) => {
+                  const active = selectedSize === row.size;
+                  return (
+                    <li
+                      key={row.size}
+                      className={`grid grid-cols-3 items-center gap-2 px-4 py-3 text-sm ${
+                        active ? "bg-primary/10 rounded-lg" : ""
+                      }`}
+                    >
+                      <span className="font-bold">{row.size}</span>
+                      <span className="text-center tabular-nums">{row.inches}</span>
+                      <span className="text-right tabular-nums">{row.cm}</span>
+                    </li>
+                  );
+                })}
+              </ul>
+              <p className="mt-4 text-xs text-muted-foreground">
+                Measurements are head circumference. Choose the size closest to your measurement.
+              </p>
+            </div>
+          </div>
+        </div>
+      )}
     </StoreLayout>
   );
 }
+
 
 function ReviewForm({ productId, onSubmitted }: { productId: string; onSubmitted: () => void }) {
   const [name, setName] = useState("");

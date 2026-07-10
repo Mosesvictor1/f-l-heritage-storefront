@@ -34,8 +34,8 @@ function CheckoutPage() {
       const r = await apiPost<OrderResult>("orders", {
         ...form,
         products: items.map((i) => {
-          const [productId, style] = i.id.split("::");
-          return { id: productId, qty: i.qty, style: style || "" };
+          const [productId, style, size] = i.id.split("::");
+          return { id: productId, qty: i.qty, style: style || "", size: size || "" };
         }),
       });
       if (!r.success) throw new Error(r.message || "Could not place order");
