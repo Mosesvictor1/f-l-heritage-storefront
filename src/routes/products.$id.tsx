@@ -2,7 +2,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
 import { toast } from "sonner";
-import { Star, Minus, Plus, ArrowLeft, ShoppingBag, ArrowRight } from "lucide-react";
+import { Star, Minus, Plus, ArrowLeft, ShoppingBag, ArrowRight, Ruler, X } from "lucide-react";
 import { StoreLayout } from "@/components/StoreLayout";
 import { apiGet, apiPost, formatNaira } from "@/lib/api";
 import type { Product } from "@/components/ProductCard";
