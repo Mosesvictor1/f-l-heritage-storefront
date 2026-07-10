@@ -152,6 +152,18 @@ function ProductPage() {
   };
   const selectedStylePrice = stylePriceFor(selectedStyle);
   const effectivePrice = selectedStylePrice ?? displayPrice;
+  const STYLE_LABELS: Record<string, string> = {
+    adisa: "Adisa -Hard band",
+    ishola: "Ishola -Soft band",
+    akanni: "Akanni -No band",
+    otunba: "Otunba -Hand netted",
+    "abeti aja": "Abeti Aja -Signature",
+  };
+  const styleLabelFor = (name: string): string => {
+    if (!name) return name;
+    const base = name.split(/[-–]/)[0].trim().toLowerCase();
+    return STYLE_LABELS[base] ?? name;
+  };
   const SIZE_CHART: Array<{ size: string; inches: string; cm: string }> = [
     { size: "XS", inches: "22.0", cm: "55.9" },
     { size: "S", inches: "22.5", cm: "57.2" },
