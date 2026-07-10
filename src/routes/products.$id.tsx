@@ -29,6 +29,8 @@ function ProductPage() {
   const [qty, setQty] = useState(1);
   const [imgIdx, setImgIdx] = useState(0);
   const [selectedStyle, setSelectedStyle] = useState<string>("");
+  const [selectedSize, setSelectedSize] = useState<string>("");
+  const [showSizeChart, setShowSizeChart] = useState(false);
 
   const { data: product, isLoading } = useQuery({
     queryKey: ["product", id],
