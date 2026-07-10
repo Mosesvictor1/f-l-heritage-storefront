@@ -262,7 +262,7 @@ function HomePage() {
         <div className="flex items-end justify-between flex-wrap gap-4">
           <div>
             <span className="text-xs font-semibold uppercase tracking-widest text-primary">Customer Favourites</span>
-            <h2 className="mt-2 font-display text-4xl font-bold">Popular Products</h2>
+            <h2 className="mt-2 font-display text-4xl font-bold">Our Fila Collections</h2>
           </div>
           <Link
             to="/shop"
