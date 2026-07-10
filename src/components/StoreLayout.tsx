@@ -45,11 +45,11 @@ export function StoreLayout({ children }: { children: ReactNode }) {
     <div className="min-h-screen flex flex-col bg-background text-foreground font-sans">
       <header className="sticky top-0 z-40 border-b border-border/60 bg-background/85 backdrop-blur">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 h-16 flex items-center justify-between gap-4">
-          <Link to="/" className="flex items-center gap-2 min-w-0">
+          <Link to="/" className="flex items-center gap-0 min-w-0">
             <img
               src={settings?.logoUrl || logoAsset}
               alt="Fìlá Òóduá"
-              className="h-10 w-10 object-contain shrink-0"
+              className="h-30 w-30 object-contain shrink-0"
             />
             <span className="font-display font-bold text-lg sm:text-xl truncate">
               {settings?.storeName || "Fìlá Òóduá"}
