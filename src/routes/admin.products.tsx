@@ -83,22 +83,43 @@ function AdminProducts() {
   );
 }
 
+const STYLE_PRESETS = ["Adisa", "Ishola", "Akanni", "Otunba", "Abeti Aja"];
+
+function parseStyles(input: unknown): string[] {
+  if (Array.isArray(input)) return input.map((s) => String(s).trim()).filter(Boolean);
+  if (typeof input === "string" && input.trim())
+    return input.split(",").map((s) => s.trim()).filter(Boolean);
+  return [];
+}
+
 function ProductForm({ product, onClose, onSaved }: { product: Product | null; onClose: () => void; onSaved: () => void }) {
+  const initialStyles = parseStyles((product as any)?.styles ?? product?.style);
   const [form, setForm] = useState({
     name: product?.name || "",
     price: String(product?.price ?? ""),
     salePrice: String(product?.salePrice ?? ""),
     category: product?.category || "",
-    style: product?.style || "Adisa",
     description: product?.description || "",
     shortDescription: product?.shortDescription || "",
     stock: String(product?.stock ?? 0),
     status: product?.status || "active",
     featured: !!product?.featured,
   });
+  const [styles, setStyles] = useState<string[]>(initialStyles);
+  const [customStyle, setCustomStyle] = useState("");
   const [images, setImages] = useState<string[]>(product?.images || []);
   const [uploading, setUploading] = useState(false);
   const [busy, setBusy] = useState(false);
+
+  const toggleStyle = (name: string) => {
+    setStyles((prev) => (prev.includes(name) ? prev.filter((s) => s !== name) : [...prev, name]));
+  };
+  const addCustomStyle = () => {
+    const v = customStyle.trim();
+    if (!v) return;
+    if (!styles.includes(v)) setStyles((prev) => [...prev, v]);
+    setCustomStyle("");
+  };
 
   const onFiles = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = Array.from(e.target.files || []);
