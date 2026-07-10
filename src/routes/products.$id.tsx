@@ -143,7 +143,7 @@ function ProductPage() {
           </div>
 
           <div>
-            {product.style && <span className="text-xs uppercase tracking-widest text-primary font-semibold">{product.style}</span>}
+            {/* {product.style && <span className="text-xs uppercase tracking-widest text-primary font-semibold">{product.style}</span>} */}
             <h1 className="mt-2 font-display text-4xl font-bold">{product.name}</h1>
             <div className="mt-4 flex items-baseline gap-3">
               <span className="font-display text-3xl font-bold text-primary">{formatNaira(displayPrice)}</span>

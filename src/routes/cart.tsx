@@ -56,7 +56,7 @@ function CartPage() {
               </div>
               <p className="mt-1 text-xs text-muted-foreground">Delivery fee calculated at checkout.</p>
               <Link to="/checkout" className="mt-6 block text-center rounded-full bg-primary text-primary-foreground py-3 font-semibold hover:opacity-90">
-                Proceed to Checkout
+                Proceed to Order
               </Link>
             </aside>
           </div>
