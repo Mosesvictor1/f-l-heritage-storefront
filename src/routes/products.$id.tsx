@@ -85,7 +85,8 @@ function ProductPage() {
   const displayPrice = hasSale ? Number(product.salePrice) : Number(product.price);
   const stock = Number(product.stock ?? 0);
   const inStock = stock > 0;
-  const inCart = items.find((i) => i.id === product.id);
+  const cartLookupId = selectedStyle ? `${product.id}::${selectedStyle}` : product.id;
+  const inCart = items.find((i) => i.id === cartLookupId || i.id === product.id || i.id.startsWith(`${product.id}::`));
 
   // Styles available for THIS product — sourced from the API (array or comma-separated).
   // Falls back to the product's single `style` field if present.
