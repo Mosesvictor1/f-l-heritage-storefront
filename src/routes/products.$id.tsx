@@ -87,8 +87,11 @@ function ProductPage() {
   const displayPrice = hasSale ? Number(product.salePrice) : Number(product.price);
   const stock = Number(product.stock ?? 0);
   const inStock = stock > 0;
-  const cartLookupId = selectedStyle ? `${product.id}::${selectedStyle}` : product.id;
-  const inCart = items.find((i) => i.id === cartLookupId || i.id === product.id || i.id.startsWith(`${product.id}::`));
+  const cartKeyParts = [product.id, selectedStyle, selectedSize].filter(Boolean);
+  const cartLookupId = cartKeyParts.join("::");
+  const inCart = items.find(
+    (i) => i.id === cartLookupId || i.id === product.id || i.id.startsWith(`${product.id}::`),
+  );
 
   // Styles available for THIS product — sourced from the API (array or comma-separated).
   // Falls back to the product's single `style` field if present.
@@ -103,12 +106,40 @@ function ProductPage() {
     .map((s: string) => String(s).trim())
     .filter(Boolean);
 
+  // Sizes available for THIS product — sourced from the API (array or comma-separated).
+  // Falls back to the standard Fìlá size run.
+  const rawSizes = (product as any).sizes;
+  const apiSizes: string[] = (
+    Array.isArray(rawSizes)
+      ? rawSizes
+      : typeof rawSizes === "string" && rawSizes.trim()
+        ? rawSizes.split(",")
+        : []
+  )
+    .map((s: string) => String(s).trim())
+    .filter(Boolean);
+  const SIZE_OPTIONS: string[] =
+    apiSizes.length > 0 ? apiSizes : ["XS", "S", "M", "L", "XL", "XXL", "XXXL"];
+  const SIZE_CHART: Array<{ size: string; inches: string; cm: string }> = [
+    { size: "XS", inches: "22.0", cm: "55.9" },
+    { size: "S", inches: "22.5", cm: "57.2" },
+    { size: "M", inches: "23.0", cm: "58.4" },
+    { size: "L", inches: "23.5", cm: "59.7" },
+    { size: "XL", inches: "24.0", cm: "61.0" },
+    { size: "XXL", inches: "24.5", cm: "62.2" },
+    { size: "XXXL", inches: "25.0", cm: "63.5" },
+  ];
+
   const addToCart = () => {
     if (!inStock) return toast.error("Out of stock");
     const style = selectedStyle || (STYLE_OPTIONS.length === 1 ? STYLE_OPTIONS[0] : "");
     if (STYLE_OPTIONS.length > 0 && !style) return toast.error("Please select a style");
-    const displayName = style ? `${product.name} — ${style}` : product.name;
-    const cartId = style ? `${product.id}::${style}` : product.id;
+    if (SIZE_OPTIONS.length > 0 && !selectedSize) return toast.error("Please select a size");
+    const size = selectedSize;
+    const suffixParts = [style, size].filter(Boolean);
+    const displayName = suffixParts.length ? `${product.name} — ${suffixParts.join(" / ")}` : product.name;
+    const idParts = [product.id, style, size].filter(Boolean);
+    const cartId = idParts.join("::");
     add({ id: cartId, name: displayName, price: displayPrice, image: images[0], stock }, qty);
     toast.success(`Added ${qty} × ${displayName} to cart`);
   };
