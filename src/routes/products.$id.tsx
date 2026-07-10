@@ -25,10 +25,10 @@ interface Review {
 
 function ProductPage() {
   const { id } = Route.useParams();
-  const navigate = useNavigate();
   const { add, items } = useCart();
   const [qty, setQty] = useState(1);
   const [imgIdx, setImgIdx] = useState(0);
+  const [selectedStyle, setSelectedStyle] = useState<string>("");
 
   const { data: product, isLoading } = useQuery({
     queryKey: ["product", id],
