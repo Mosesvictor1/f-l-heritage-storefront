@@ -152,6 +152,18 @@ function ProductPage() {
   };
   const selectedStylePrice = stylePriceFor(selectedStyle);
   const effectivePrice = selectedStylePrice ?? displayPrice;
+  const STYLE_LABELS: Record<string, string> = {
+    adisa: "Adisa -Hard band",
+    ishola: "Ishola -Soft band",
+    akanni: "Akanni -No band",
+    otunba: "Otunba -Hand netted",
+    "abeti aja": "Abeti Aja -Signature",
+  };
+  const styleLabelFor = (name: string): string => {
+    if (!name) return name;
+    const base = name.split(/[-–]/)[0].trim().toLowerCase();
+    return STYLE_LABELS[base] ?? name;
+  };
   const SIZE_CHART: Array<{ size: string; inches: string; cm: string }> = [
     { size: "XS", inches: "22.0", cm: "55.9" },
     { size: "S", inches: "22.5", cm: "57.2" },
@@ -168,7 +180,7 @@ function ProductPage() {
     if (STYLE_OPTIONS.length > 0 && !style) return toast.error("Please select a style");
     if (SIZE_OPTIONS.length > 0 && !selectedSize) return toast.error("Please select a size");
     const size = selectedSize;
-    const suffixParts = [style, size].filter(Boolean);
+    const suffixParts = [style ? styleLabelFor(style) : "", size].filter(Boolean);
     const displayName = suffixParts.length ? `${product.name} — ${suffixParts.join(" / ")}` : product.name;
     const idParts = [product.id, style, size].filter(Boolean);
     const cartId = idParts.join("::");
@@ -239,16 +251,17 @@ function ProductPage() {
                   <option value="">Choose a style…</option>
                   {STYLE_OPTIONS.map((name) => {
                     const sp = stylePriceFor(name);
+                    const label = styleLabelFor(name);
                     return (
                       <option key={name} value={name}>
-                        {name}{sp != null ? ` — ${formatNaira(sp)}` : ""}
+                        {label}{sp != null ? ` — ${formatNaira(sp)}` : ""}
                       </option>
                     );
                   })}
                 </select>
                 {selectedStyle && (
                   <p className="mt-2 text-xs text-muted-foreground">
-                    You selected <span className="font-semibold text-foreground">{selectedStyle}</span>
+                    You selected <span className="font-semibold text-foreground">{styleLabelFor(selectedStyle)}</span>
                     {selectedStylePrice != null && (
                       <> at <span className="font-semibold text-primary">{formatNaira(selectedStylePrice)}</span></>
                     )}.
