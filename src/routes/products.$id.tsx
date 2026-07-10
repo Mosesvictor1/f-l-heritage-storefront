@@ -1,8 +1,8 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
 import { toast } from "sonner";
-import { Star, Minus, Plus, ArrowLeft } from "lucide-react";
+import { Star, Minus, Plus, ArrowLeft, ShoppingBag, ArrowRight } from "lucide-react";
 import { StoreLayout } from "@/components/StoreLayout";
 import { apiGet, apiPost, formatNaira } from "@/lib/api";
 import type { Product } from "@/components/ProductCard";
@@ -25,7 +25,8 @@ interface Review {
 
 function ProductPage() {
   const { id } = Route.useParams();
-  const { add } = useCart();
+  const navigate = useNavigate();
+  const { add, items } = useCart();
   const [qty, setQty] = useState(1);
   const [imgIdx, setImgIdx] = useState(0);
 
