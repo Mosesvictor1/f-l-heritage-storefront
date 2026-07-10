@@ -262,7 +262,7 @@ function HomePage() {
                     <img src={s.image} alt={`${s.name} Fìlá — ${s.tag}`} loading="lazy" className="h-full w-full object-cover group-hover:scale-105 transition-transform duration-500" />
                   </div>
                   <div className="p-4 flex flex-col gap-1">
-                    <h3 className="font-display font-semibold text-lg">{s.name}  -{s.tag}</h3>
+                    <h3 className="font-display font-semibold text-lg">{s.name}  <span className="text-muted-foreground text-sm font-normal">-{s.tag}</span></h3>
                     <span className="text-primary font-bold">{formatNaira(s.price)}</span>
                   </div>
                 </Link>
