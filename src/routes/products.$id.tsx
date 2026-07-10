@@ -85,6 +85,12 @@ function ProductPage() {
   const displayPrice = hasSale ? Number(product.salePrice) : Number(product.price);
   const stock = Number(product.stock ?? 0);
   const inStock = stock > 0;
+  const inCart = items.find((i) => i.id === product.id);
+
+  // Style variants: other products sharing the same style / category
+  const variants = DEMO_PRODUCTS.filter(
+    (p) => p.id !== product.id && ((product.style && p.style === product.style) || (product.category && p.category === product.category)),
+  );
 
   const addToCart = () => {
     if (!inStock) return toast.error("Out of stock");
@@ -139,6 +145,28 @@ function ProductPage() {
               {product.description || product.shortDescription || ""}
             </p>
 
+            {variants.length > 0 && (
+              <div className="mt-6">
+                <label className="text-xs uppercase tracking-widest text-primary font-semibold">
+                  Available Styles
+                </label>
+                <select
+                  value=""
+                  onChange={(e) => {
+                    if (e.target.value) navigate({ to: "/products/$id", params: { id: e.target.value } });
+                  }}
+                  className="mt-2 w-full rounded-full border border-border bg-card px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-primary/40"
+                >
+                  <option value="">Select another style…</option>
+                  {variants.map((v) => (
+                    <option key={v.id} value={v.id}>
+                      {v.name} — {formatNaira(v.salePrice || v.price)}
+                    </option>
+                  ))}
+                </select>
+              </div>
+            )}
+
             <div className="mt-8 flex items-center gap-4">
               <div className="inline-flex items-center rounded-full border border-border">
                 <button onClick={() => setQty((q) => Math.max(1, q - 1))} className="p-3 hover:bg-muted rounded-l-full"><Minus className="h-4 w-4" /></button>
@@ -148,11 +176,29 @@ function ProductPage() {
               <button
                 onClick={addToCart}
                 disabled={!inStock}
-                className="flex-1 rounded-full bg-primary text-primary-foreground py-3.5 font-semibold hover:opacity-90 disabled:opacity-50 transition"
+                className="flex-1 rounded-full bg-primary text-primary-foreground py-3.5 font-semibold hover:opacity-90 disabled:opacity-50 transition inline-flex items-center justify-center gap-2"
               >
-                Add to Cart
+                <ShoppingBag className="h-4 w-4" />
+                {inCart ? `Add ${qty} more` : "Add to Cart"}
               </button>
             </div>
+
+            {inCart && (
+              <div className="mt-4 flex flex-wrap gap-3">
+                <Link
+                  to="/cart"
+                  className="flex-1 min-w-[160px] rounded-full bg-secondary text-secondary-foreground py-3 font-semibold text-center inline-flex items-center justify-center gap-2 hover:opacity-90 transition"
+                >
+                  Proceed to Order <ArrowRight className="h-4 w-4" />
+                </Link>
+                <Link
+                  to="/shop"
+                  className="flex-1 min-w-[160px] rounded-full border border-primary/30 bg-primary/5 text-primary py-3 font-semibold text-center hover:bg-primary/10 transition"
+                >
+                  Continue Shopping
+                </Link>
+              </div>
+            )}
           </div>
         </div>
 
