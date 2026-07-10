@@ -87,15 +87,21 @@ function ProductPage() {
   const inStock = stock > 0;
   const inCart = items.find((i) => i.id === product.id);
 
-  // Style variants: other products sharing the same style / category
-  const variants = DEMO_PRODUCTS.filter(
-    (p) => p.id !== product.id && ((product.style && p.style === product.style) || (product.category && p.category === product.category)),
-  );
+  // Fixed Fìlá style options — user picks which style they want for THIS product
+  const STYLE_OPTIONS = [
+    { name: "Adisa", tag: "Hard band" },
+    { name: "Ishola", tag: "Soft band" },
+    { name: "Akanni", tag: "No band" },
+    { name: "Otunba", tag: "Hand netted" },
+    { name: "Abeti Aja", tag: "Signature" },
+  ];
 
   const addToCart = () => {
     if (!inStock) return toast.error("Out of stock");
-    add({ id: product.id, name: product.name, price: displayPrice, image: images[0], stock }, qty);
-    toast.success(`Added ${qty} × ${product.name} to cart`);
+    if (!selectedStyle) return toast.error("Please select a style");
+    const displayName = `${product.name} — ${selectedStyle}`;
+    add({ id: `${product.id}::${selectedStyle}`, name: displayName, price: displayPrice, image: images[0], stock }, qty);
+    toast.success(`Added ${qty} × ${displayName} to cart`);
   };
 
   return (
