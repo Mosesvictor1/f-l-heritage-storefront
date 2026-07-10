@@ -11,12 +11,20 @@ import heroFila2 from "@/assets/hero-fila-2.jpg";
 import heroFila4 from "@/assets/hero-fila-4.jpg";
 import heroFila5 from "@/assets/hero-fila-5.jpg";
 import heroFila6 from "@/assets/hero-fila-6.jpg";
+import heroBrownAgbada from "@/assets/hero-brown-agbada.jpg.asset.json";
+import styleAdisa from "@/assets/style-adisa.jpg";
+import styleIshola from "@/assets/style-ishola.jpg";
+import styleAkanni from "@/assets/style-akanni.jpg";
+import styleOtunba from "@/assets/style-otunba.jpg";
+import styleAbetiAja from "@/assets/style-abeti-aja.jpg";
+import { formatNaira } from "@/lib/api";
 
 export const Route = createFileRoute("/")({
   component: HomePage,
 });
 
 const HERO_IMAGES = [
+  { src: heroBrownAgbada.url, alt: "Yoruba gentleman in brown agbada with matching Fìlá cap and gold beads" },
   { src: heroFila1, alt: "Yoruba gentleman wearing a navy velvet Fìlá Òóduá cap with gold embroidery" },
   { src: heroFila2, alt: "Young Yoruba man wearing a burgundy soft-band Fìlá Òóduá cap" },
   { src: heroFila4, alt: "Distinguished Yoruba man wearing a royal purple velvet Fìlá with gold embroidery" },
@@ -25,10 +33,11 @@ const HERO_IMAGES = [
 ];
 
 const STYLES = [
-  { name: "Adisa", tag: "Hard band", desc: "Structured, regal — the signature statement piece." },
-  { name: "Ishola", tag: "Soft band", desc: "Comfortable, refined and endlessly wearable." },
-  { name: "Akanni", tag: "No band", desc: "Free-form, contemporary elegance." },
-  { name: "Otunba", tag: "Hand netted", desc: "Intricate netted craftsmanship for the connoisseur." },
+  { name: "Adisa", tag: "Hard band", price: 10000, image: styleAdisa },
+  { name: "Ishola", tag: "Soft band", price: 10000, image: styleIshola },
+  { name: "Akanni", tag: "No band", price: 10000, image: styleAkanni },
+  { name: "Otunba", tag: "Hand netted", price: 15000, image: styleOtunba },
+  { name: "Abeti Aja", tag: "Signature", price: 15000, image: styleAbetiAja },
 ];
 
 function extractList(d: unknown): Product[] {
