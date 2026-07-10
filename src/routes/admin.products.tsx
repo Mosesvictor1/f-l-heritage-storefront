@@ -141,6 +141,8 @@ function ProductForm({ product, onClose, onSaved }: { product: Product | null; o
         price: Number(form.price),
         salePrice: form.salePrice ? Number(form.salePrice) : 0,
         stock: Number(form.stock),
+        styles,
+        style: styles[0] || "",
         images,
       };
       const r = product
@@ -163,11 +165,42 @@ function ProductForm({ product, onClose, onSaved }: { product: Product | null; o
           <Fld label="Category" value={form.category} onChange={(v) => setForm({ ...form, category: v })} />
           <Fld label="Price (₦)" type="number" value={form.price} onChange={(v) => setForm({ ...form, price: v })} required />
           <Fld label="Sale Price (₦)" type="number" value={form.salePrice} onChange={(v) => setForm({ ...form, salePrice: v })} />
-          <div>
-            <label className="text-sm font-medium">Style</label>
-            <select value={form.style} onChange={(e) => setForm({ ...form, style: e.target.value })} className="mt-1 w-full rounded-lg border border-border bg-background px-3 py-2 text-sm">
-              {["Adisa", "Ishola", "Akanni", "Otunba"].map((s) => <option key={s}>{s}</option>)}
-            </select>
+          <div className="sm:col-span-2">
+            <label className="text-sm font-medium">Styles (select one or more)</label>
+            <div className="mt-2 flex flex-wrap gap-2">
+              {Array.from(new Set([...STYLE_PRESETS, ...styles])).map((s) => {
+                const active = styles.includes(s);
+                return (
+                  <button
+                    type="button"
+                    key={s}
+                    onClick={() => toggleStyle(s)}
+                    className={`px-3 py-1.5 rounded-full text-xs font-semibold border transition ${
+                      active
+                        ? "bg-primary text-primary-foreground border-primary"
+                        : "bg-background border-border hover:bg-muted"
+                    }`}
+                  >
+                    {s}
+                  </button>
+                );
+              })}
+            </div>
+            <div className="mt-2 flex gap-2">
+              <input
+                value={customStyle}
+                onChange={(e) => setCustomStyle(e.target.value)}
+                onKeyDown={(e) => { if (e.key === "Enter") { e.preventDefault(); addCustomStyle(); } }}
+                placeholder="Add custom style"
+                className="flex-1 rounded-lg border border-border bg-background px-3 py-2 text-sm"
+              />
+              <button type="button" onClick={addCustomStyle} className="rounded-lg bg-secondary text-secondary-foreground px-3 py-2 text-sm font-semibold">
+                Add
+              </button>
+            </div>
+            {styles.length > 0 && (
+              <p className="mt-2 text-xs text-muted-foreground">Selected: {styles.join(", ")}</p>
+            )}
           </div>
           <Fld label="Stock" type="number" value={form.stock} onChange={(v) => setForm({ ...form, stock: v })} />
           <div className="sm:col-span-2">
