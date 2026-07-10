@@ -4,6 +4,7 @@ import { ShoppingCart, Menu, X } from "lucide-react";
 import { useState, type ReactNode } from "react";
 import { apiGet } from "@/lib/api";
 import { useCart } from "@/lib/cart";
+import logoAsset from "@/assets/fila-logo.png.asset.json";
 
 interface Settings {
   storeName?: string;
@@ -45,11 +46,11 @@ export function StoreLayout({ children }: { children: ReactNode }) {
       <header className="sticky top-0 z-40 border-b border-border/60 bg-background/85 backdrop-blur">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 h-16 flex items-center justify-between gap-4">
           <Link to="/" className="flex items-center gap-2 min-w-0">
-            {settings?.logoUrl ? (
-              <img src={settings.logoUrl} alt="" className="h-9 w-9 rounded-full object-cover shrink-0" />
-            ) : (
-              <div className="h-9 w-9 rounded-full bg-primary text-primary-foreground grid place-items-center font-display font-bold shrink-0">F</div>
-            )}
+            <img
+              src={settings?.logoUrl || logoAsset.url}
+              alt="Fìlá Òóduá"
+              className="h-10 w-10 object-contain shrink-0"
+            />
             <span className="font-display font-bold text-lg sm:text-xl truncate">
               {settings?.storeName || "Fìlá Òóduá"}
             </span>
