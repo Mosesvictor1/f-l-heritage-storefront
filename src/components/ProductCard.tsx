@@ -33,7 +33,7 @@ export function ProductCard({ p }: { p: Product }) {
         )}
       </div>
       <div className="p-4 flex flex-col gap-1">
-        {p.style && <span className="text-xs uppercase tracking-wider text-muted-foreground">{p.style}</span>}
+        {/* {p.style && <span className="text-xs uppercase tracking-wider text-muted-foreground">{p.style}</span>} */}
         <h3 className="font-display font-semibold text-lg truncate">{p.name}</h3>
         <div className="mt-1 flex items-baseline gap-2">
           {hasSale ? (
