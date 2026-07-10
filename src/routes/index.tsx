@@ -237,32 +237,38 @@ function HomePage() {
         </div>
       </section>
 
-       {/* Styles */}
-      <section id="styles" className="bg-muted/40 py-24">
+       {/* Styles — horizontal scroll */}
+      <section id="styles" className="bg-muted/40 py-20">
         <div className="mx-auto max-w-7xl px-4 sm:px-6">
-          <div className="text-center max-w-2xl mx-auto">
-            <span className="text-xs font-semibold uppercase tracking-widest text-primary">Our Signature Styles</span>
-            <h2 className="mt-4 font-display text-4xl sm:text-5xl font-bold">Four ways to wear your heritage.</h2>
+          <div className="flex items-end justify-between flex-wrap gap-4">
+            <div>
+              <span className="text-xs font-semibold uppercase tracking-widest text-primary">Our Signature Styles</span>
+              <h2 className="mt-2 font-display text-4xl font-bold">Five ways to wear your heritage.</h2>
+            </div>
+            <Link to="/shop" className="text-sm font-semibold text-primary inline-flex items-center gap-1 hover:gap-2 transition-all">
+              See all <ArrowRight className="h-4 w-4" />
+            </Link>
           </div>
-          <div className="mt-14 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
-            {STYLES.map((s) => (
-              <Link
-                key={s.name}
-                to="/shop"
-                search={{ style: s.name } as never}
-                className="group rounded-3xl bg-card p-8 border border-border/50 hover:border-secondary hover:shadow-xl transition"
-              >
-                <div className="h-14 w-14 rounded-2xl bg-secondary/30 grid place-items-center font-display font-bold text-2xl text-primary">
-                  {s.name[0]}
-                </div>
-                <h3 className="mt-6 font-display text-2xl font-bold">{s.name}</h3>
-                <p className="text-xs uppercase tracking-widest text-primary mt-1">{s.tag}</p>
-                <p className="mt-3 text-sm text-muted-foreground">{s.desc}</p>
-                <span className="mt-6 inline-flex items-center gap-1 text-sm font-semibold text-primary group-hover:gap-2 transition-all">
-                  Shop {s.name} <ArrowRight className="h-3 w-3" />
-                </span>
-              </Link>
-            ))}
+
+          <div className="mt-10 -mx-4 px-4 sm:-mx-6 sm:px-6">
+            <div className="flex gap-5 overflow-x-auto pb-4 snap-x snap-mandatory [scrollbar-width:thin]">
+              {STYLES.map((s) => (
+                <Link
+                  key={s.name}
+                  to="/shop"
+                  search={{ style: s.name } as never}
+                  className="group w-[220px] shrink-0 snap-start sm:w-[260px] rounded-2xl overflow-hidden bg-card border border-border/50 shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300"
+                >
+                  <div className="aspect-square bg-muted overflow-hidden">
+                    <img src={s.image} alt={`${s.name} Fìlá — ${s.tag}`} loading="lazy" className="h-full w-full object-cover group-hover:scale-105 transition-transform duration-500" />
+                  </div>
+                  <div className="p-4 flex flex-col gap-1">
+                    <h3 className="font-display font-semibold text-lg">{s.name}</h3>
+                    <span className="text-primary font-bold">{formatNaira(s.price)}</span>
+                  </div>
+                </Link>
+              ))}
+            </div>
           </div>
         </div>
       </section>
