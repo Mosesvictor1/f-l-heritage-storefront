@@ -87,20 +87,26 @@ function ProductPage() {
   const inStock = stock > 0;
   const inCart = items.find((i) => i.id === product.id);
 
-  // Fixed Fìlá style options — user picks which style they want for THIS product
-  const STYLE_OPTIONS = [
-    { name: "Adisa", tag: "Hard band" },
-    { name: "Ishola", tag: "Soft band" },
-    { name: "Akanni", tag: "No band" },
-    { name: "Otunba", tag: "Hand netted" },
-    { name: "Abeti Aja", tag: "Signature" },
-  ];
+  // Styles available for THIS product — sourced from the API (array or comma-separated).
+  // Falls back to the product's single `style` field if present.
+  const rawStyles = (product as any).styles ?? product.style;
+  const STYLE_OPTIONS: string[] = (
+    Array.isArray(rawStyles)
+      ? rawStyles
+      : typeof rawStyles === "string" && rawStyles.trim()
+        ? rawStyles.split(",")
+        : []
+  )
+    .map((s: string) => String(s).trim())
+    .filter(Boolean);
 
   const addToCart = () => {
     if (!inStock) return toast.error("Out of stock");
-    if (!selectedStyle) return toast.error("Please select a style");
-    const displayName = `${product.name} — ${selectedStyle}`;
-    add({ id: `${product.id}::${selectedStyle}`, name: displayName, price: displayPrice, image: images[0], stock }, qty);
+    const style = selectedStyle || (STYLE_OPTIONS.length === 1 ? STYLE_OPTIONS[0] : "");
+    if (STYLE_OPTIONS.length > 0 && !style) return toast.error("Please select a style");
+    const displayName = style ? `${product.name} — ${style}` : product.name;
+    const cartId = style ? `${product.id}::${style}` : product.id;
+    add({ id: cartId, name: displayName, price: displayPrice, image: images[0], stock }, qty);
     toast.success(`Added ${qty} × ${displayName} to cart`);
   };
 
@@ -151,28 +157,28 @@ function ProductPage() {
               {product.description || product.shortDescription || ""}
             </p>
 
-            <div className="mt-6">
-              <label className="text-xs uppercase tracking-widest text-primary font-semibold">
-                Select Style
-              </label>
-              <select
-                value={selectedStyle}
-                onChange={(e) => setSelectedStyle(e.target.value)}
-                className="mt-2 w-full rounded-full border border-border bg-card px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-primary/40"
-              >
-                <option value="">Choose a style…</option>
-                {STYLE_OPTIONS.map((s) => (
-                  <option key={s.name} value={s.name}>
-                    {s.name} — {s.tag}
-                  </option>
-                ))}
-              </select>
-              {selectedStyle && (
-                <p className="mt-2 text-xs text-muted-foreground">
-                  You selected <span className="font-semibold text-foreground">{selectedStyle}</span> for this product.
-                </p>
-              )}
-            </div>
+            {STYLE_OPTIONS.length > 0 && (
+              <div className="mt-6">
+                <label className="text-xs uppercase tracking-widest text-primary font-semibold">
+                  Select Style
+                </label>
+                <select
+                  value={selectedStyle}
+                  onChange={(e) => setSelectedStyle(e.target.value)}
+                  className="mt-2 w-full rounded-full border border-border bg-card px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-primary/40"
+                >
+                  <option value="">Choose a style…</option>
+                  {STYLE_OPTIONS.map((name) => (
+                    <option key={name} value={name}>{name}</option>
+                  ))}
+                </select>
+                {selectedStyle && (
+                  <p className="mt-2 text-xs text-muted-foreground">
+                    You selected <span className="font-semibold text-foreground">{selectedStyle}</span> for this product.
+                  </p>
+                )}
+              </div>
+            )}
 
             <div className="mt-8 flex items-center gap-4">
               <div className="inline-flex items-center rounded-full border border-border">

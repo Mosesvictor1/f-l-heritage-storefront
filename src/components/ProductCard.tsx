@@ -11,6 +11,7 @@ export interface Product {
   images?: string[];
   category?: string;
   style?: string;
+  styles?: string[] | string;
   description?: string;
   shortDescription?: string;
   stock?: number;
