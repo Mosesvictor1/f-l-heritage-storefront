@@ -228,6 +228,36 @@ function HomePage() {
         </div>
       </section>
 
+       {/* Styles */}
+      <section id="styles" className="bg-muted/40 py-24">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6">
+          <div className="text-center max-w-2xl mx-auto">
+            <span className="text-xs font-semibold uppercase tracking-widest text-primary">Our Signature Styles</span>
+            <h2 className="mt-4 font-display text-4xl sm:text-5xl font-bold">Four ways to wear your heritage.</h2>
+          </div>
+          <div className="mt-14 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+            {STYLES.map((s) => (
+              <Link
+                key={s.name}
+                to="/shop"
+                search={{ style: s.name } as never}
+                className="group rounded-3xl bg-card p-8 border border-border/50 hover:border-secondary hover:shadow-xl transition"
+              >
+                <div className="h-14 w-14 rounded-2xl bg-secondary/30 grid place-items-center font-display font-bold text-2xl text-primary">
+                  {s.name[0]}
+                </div>
+                <h3 className="mt-6 font-display text-2xl font-bold">{s.name}</h3>
+                <p className="text-xs uppercase tracking-widest text-primary mt-1">{s.tag}</p>
+                <p className="mt-3 text-sm text-muted-foreground">{s.desc}</p>
+                <span className="mt-6 inline-flex items-center gap-1 text-sm font-semibold text-primary group-hover:gap-2 transition-all">
+                  Shop {s.name} <ArrowRight className="h-3 w-3" />
+                </span>
+              </Link>
+            ))}
+          </div>
+        </div>
+      </section>
+
       {/* ============ NEW ARRIVALS — horizontal scroll ============ */}
       <section id="new-arrivals" className="mx-auto max-w-7xl px-4 sm:px-6 pt-20 pb-4">
         <div className="flex items-end justify-between flex-wrap gap-4">
@@ -292,35 +322,7 @@ function HomePage() {
         </p>
       </section>
 
-      {/* Styles */}
-      <section id="styles" className="bg-muted/40 py-24">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6">
-          <div className="text-center max-w-2xl mx-auto">
-            <span className="text-xs font-semibold uppercase tracking-widest text-primary">Our Signature Styles</span>
-            <h2 className="mt-4 font-display text-4xl sm:text-5xl font-bold">Four ways to wear your heritage.</h2>
-          </div>
-          <div className="mt-14 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
-            {STYLES.map((s) => (
-              <Link
-                key={s.name}
-                to="/shop"
-                search={{ style: s.name } as never}
-                className="group rounded-3xl bg-card p-8 border border-border/50 hover:border-secondary hover:shadow-xl transition"
-              >
-                <div className="h-14 w-14 rounded-2xl bg-secondary/30 grid place-items-center font-display font-bold text-2xl text-primary">
-                  {s.name[0]}
-                </div>
-                <h3 className="mt-6 font-display text-2xl font-bold">{s.name}</h3>
-                <p className="text-xs uppercase tracking-widest text-primary mt-1">{s.tag}</p>
-                <p className="mt-3 text-sm text-muted-foreground">{s.desc}</p>
-                <span className="mt-6 inline-flex items-center gap-1 text-sm font-semibold text-primary group-hover:gap-2 transition-all">
-                  Shop {s.name} <ArrowRight className="h-3 w-3" />
-                </span>
-              </Link>
-            ))}
-          </div>
-        </div>
-      </section>
+     
     </StoreLayout>
   );
 }
