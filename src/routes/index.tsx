@@ -243,7 +243,6 @@ function HomePage() {
           <div className="flex items-end justify-between flex-wrap gap-4">
             <div>
               <span className="text-xs font-semibold uppercase tracking-widest text-primary">Our Signature Styles</span>
-              <h2 className="mt-2 font-display text-4xl font-bold">Five ways to wear your heritage.</h2>
             </div>
             <Link to="/shop" className="text-sm font-semibold text-primary inline-flex items-center gap-1 hover:gap-2 transition-all">
               See all <ArrowRight className="h-4 w-4" />
@@ -263,7 +262,7 @@ function HomePage() {
                     <img src={s.image} alt={`${s.name} Fìlá — ${s.tag}`} loading="lazy" className="h-full w-full object-cover group-hover:scale-105 transition-transform duration-500" />
                   </div>
                   <div className="p-4 flex flex-col gap-1">
-                    <h3 className="font-display font-semibold text-lg">{s.name}</h3>
+                    <h3 className="font-display font-semibold text-lg">{s.name}  -{s.tag}</h3>
                     <span className="text-primary font-bold">{formatNaira(s.price)}</span>
                   </div>
                 </Link>
