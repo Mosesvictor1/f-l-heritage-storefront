@@ -180,7 +180,7 @@ function ProductPage() {
     if (STYLE_OPTIONS.length > 0 && !style) return toast.error("Please select a style");
     if (SIZE_OPTIONS.length > 0 && !selectedSize) return toast.error("Please select a size");
     const size = selectedSize;
-    const suffixParts = [style, size].filter(Boolean);
+    const suffixParts = [style ? styleLabelFor(style) : "", size].filter(Boolean);
     const displayName = suffixParts.length ? `${product.name} — ${suffixParts.join(" / ")}` : product.name;
     const idParts = [product.id, style, size].filter(Boolean);
     const cartId = idParts.join("::");
