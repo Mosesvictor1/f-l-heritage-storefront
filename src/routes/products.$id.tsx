@@ -1,4 +1,4 @@
-import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
 import { toast } from "sonner";
@@ -25,10 +25,10 @@ interface Review {
 
 function ProductPage() {
   const { id } = Route.useParams();
-  const navigate = useNavigate();
   const { add, items } = useCart();
   const [qty, setQty] = useState(1);
   const [imgIdx, setImgIdx] = useState(0);
+  const [selectedStyle, setSelectedStyle] = useState<string>("");
 
   const { data: product, isLoading } = useQuery({
     queryKey: ["product", id],
@@ -87,15 +87,21 @@ function ProductPage() {
   const inStock = stock > 0;
   const inCart = items.find((i) => i.id === product.id);
 
-  // Style variants: other products sharing the same style / category
-  const variants = DEMO_PRODUCTS.filter(
-    (p) => p.id !== product.id && ((product.style && p.style === product.style) || (product.category && p.category === product.category)),
-  );
+  // Fixed Fìlá style options — user picks which style they want for THIS product
+  const STYLE_OPTIONS = [
+    { name: "Adisa", tag: "Hard band" },
+    { name: "Ishola", tag: "Soft band" },
+    { name: "Akanni", tag: "No band" },
+    { name: "Otunba", tag: "Hand netted" },
+    { name: "Abeti Aja", tag: "Signature" },
+  ];
 
   const addToCart = () => {
     if (!inStock) return toast.error("Out of stock");
-    add({ id: product.id, name: product.name, price: displayPrice, image: images[0], stock }, qty);
-    toast.success(`Added ${qty} × ${product.name} to cart`);
+    if (!selectedStyle) return toast.error("Please select a style");
+    const displayName = `${product.name} — ${selectedStyle}`;
+    add({ id: `${product.id}::${selectedStyle}`, name: displayName, price: displayPrice, image: images[0], stock }, qty);
+    toast.success(`Added ${qty} × ${displayName} to cart`);
   };
 
   return (
@@ -145,27 +151,28 @@ function ProductPage() {
               {product.description || product.shortDescription || ""}
             </p>
 
-            {variants.length > 0 && (
-              <div className="mt-6">
-                <label className="text-xs uppercase tracking-widest text-primary font-semibold">
-                  Available Styles
-                </label>
-                <select
-                  value=""
-                  onChange={(e) => {
-                    if (e.target.value) navigate({ to: "/products/$id", params: { id: e.target.value } });
-                  }}
-                  className="mt-2 w-full rounded-full border border-border bg-card px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-primary/40"
-                >
-                  <option value="">Select another style…</option>
-                  {variants.map((v) => (
-                    <option key={v.id} value={v.id}>
-                      {v.name} — {formatNaira(v.salePrice || v.price)}
-                    </option>
-                  ))}
-                </select>
-              </div>
-            )}
+            <div className="mt-6">
+              <label className="text-xs uppercase tracking-widest text-primary font-semibold">
+                Select Style
+              </label>
+              <select
+                value={selectedStyle}
+                onChange={(e) => setSelectedStyle(e.target.value)}
+                className="mt-2 w-full rounded-full border border-border bg-card px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-primary/40"
+              >
+                <option value="">Choose a style…</option>
+                {STYLE_OPTIONS.map((s) => (
+                  <option key={s.name} value={s.name}>
+                    {s.name} — {s.tag}
+                  </option>
+                ))}
+              </select>
+              {selectedStyle && (
+                <p className="mt-2 text-xs text-muted-foreground">
+                  You selected <span className="font-semibold text-foreground">{selectedStyle}</span> for this product.
+                </p>
+              )}
+            </div>
 
             <div className="mt-8 flex items-center gap-4">
               <div className="inline-flex items-center rounded-full border border-border">
