@@ -252,10 +252,8 @@ function HomePage() {
           <div className="mt-10 -mx-4 px-4 sm:-mx-6 sm:px-6">
             <div className="flex gap-5 overflow-x-auto pb-4 snap-x snap-mandatory [scrollbar-width:thin]">
               {STYLES.map((s) => (
-                <Link
+                <div
                   key={s.name}
-                  to="/shop"
-                  search={{ style: s.name } as never}
                   className="group w-[220px] shrink-0 snap-start sm:w-[260px] rounded-2xl overflow-hidden bg-card border border-border/50 shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300"
                 >
                   <div className="aspect-square bg-muted overflow-hidden">
@@ -265,7 +263,7 @@ function HomePage() {
                     <h3 className="font-display font-semibold text-lg">{s.name}  <span className="text-muted-foreground text-sm font-normal">-{s.tag}</span></h3>
                     <span className="text-primary font-bold">{formatNaira(s.price)}</span>
                   </div>
-                </Link>
+                </div>
               ))}
             </div>
           </div>
