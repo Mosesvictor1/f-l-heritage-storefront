@@ -35,9 +35,21 @@ function OrderLookup() {
     e.preventDefault();
     setBusy(true); setOrder(null);
     try {
-      const r = await apiGet<Order>("orders", { id: orderId });
+      const r = await apiGet<any>("orders", { id: orderId });
       if (!r.success || !r.data) throw new Error(r.message || "Order not found");
-      const o = r.data as Order;
+      
+      let o: Order | null = null;
+      const d = r.data;
+      if (d.items && Array.isArray(d.items)) {
+        o = d.items[0] as Order;
+      } else if (Array.isArray(d)) {
+        o = d[0] as Order;
+      } else {
+        o = d as Order;
+      }
+
+      if (!o || !o.orderId) throw new Error("Order not found");
+
       if ((o.email || "").toLowerCase().trim() !== email.toLowerCase().trim()) {
         throw new Error("Email does not match this order.");
       }

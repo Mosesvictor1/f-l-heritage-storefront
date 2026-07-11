@@ -2,8 +2,8 @@ import axios from "axios";
 
 const FALLBACK = "https://script.google.com/macros/s/AKfycbyIZER_Mu_lF3lgIW9L6vWStCoEGJdDf3oPHKwNGQe49p4SnmHDl7cHrP7OhwACWktMEA/exec";
 const BASE_URL = (import.meta.env.VITE_API_BASE_URL as string | undefined) || FALLBACK;
-const CLOUD_NAME = (import.meta.env.VITE_CLOUDINARY_CLOUD_NAME as string | undefined) || "decbrtduj";
-const UPLOAD_PRESET = (import.meta.env.VITE_CLOUDINARY_UPLOAD_PRESET as string | undefined) || "unsigned_preset";
+const CLOUD_NAME = (import.meta.env.VITE_CLOUDINARY_CLOUD_NAME as string | undefined) || "dkerrqvao";
+const UPLOAD_PRESET = (import.meta.env.VITE_CLOUDINARY_UPLOAD_PRESET as string | undefined) || "ml_default";
 
 const api = axios.create({
   baseURL: BASE_URL,

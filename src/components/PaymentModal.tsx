@@ -2,6 +2,7 @@ import { useState } from "react";
 import { toast } from "sonner";
 import { Copy, Check, Loader2, MessageCircle, Upload, X } from "lucide-react";
 import { apiPost, uploadToCloudinary, formatNaira } from "@/lib/api";
+import { useSettings } from "@/components/StoreLayout";
 
 export interface OrderResult {
   orderId: string;
@@ -27,6 +28,7 @@ export function PaymentModal({
   const [uploading, setUploading] = useState(false);
   const [uploaded, setUploaded] = useState(false);
   const [confirmClose, setConfirmClose] = useState(false);
+  const { data: settings } = useSettings();
 
   const bank = order.bankDetails || {};
   const acct = bank.accountNumber || "";
@@ -41,8 +43,19 @@ export function PaymentModal({
     }
   };
 
+  const getCleanNumber = () => {
+    const rawNumber = settings?.whatsappNumber || order.whatsappNumber || "2348166963223";
+    let num = rawNumber.replace(/\D/g, "");
+    if (num.startsWith("0")) {
+      num = "234" + num.slice(1);
+    } else if (num.length === 10 && (num.startsWith("7") || num.startsWith("8") || num.startsWith("9"))) {
+      num = "234" + num;
+    }
+    return num;
+  };
+
   const openWhatsapp = () => {
-    const num = (order.whatsappNumber || "").replace(/\D/g, "");
+    const num = getCleanNumber();
     const msg = encodeURIComponent(
       `Hi, I've made payment for Order ${order.orderId} (${customerName}). Here is my receipt.`,
     );
@@ -59,6 +72,14 @@ export function PaymentModal({
       if (!r.success) throw new Error(r.message || "Failed to attach receipt");
       setUploaded(true);
       toast.success("Receipt received! We'll confirm your payment shortly.");
+
+      const num = getCleanNumber();
+      const msg = encodeURIComponent(
+        `Hi, I've made payment for Order ${order.orderId} (${customerName}). Here is my receipt.`,
+      );
+      setTimeout(() => {
+        window.location.href = `https://wa.me/${num}?text=${msg}`;
+      }, 1500);
     } catch (err) {
       toast.error((err as Error).message);
     } finally {

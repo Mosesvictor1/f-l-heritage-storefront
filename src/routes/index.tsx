@@ -41,9 +41,9 @@ const STYLES = [
 ];
 
 function extractList(d: unknown): Product[] {
-  return Array.isArray(d)
-    ? (d as Product[])
-    : ((d as { products?: Product[] } | null | undefined)?.products ?? []);
+  if (Array.isArray(d)) return d as Product[];
+  const obj = d as { products?: Product[]; items?: Product[] } | null | undefined;
+  return obj?.items || obj?.products || [];
 }
 
 function SectionSpinner() {

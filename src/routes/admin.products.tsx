@@ -18,9 +18,9 @@ function AdminProducts() {
   const { data, isLoading, refetch } = useQuery({
     queryKey: ["admin", "products"],
     queryFn: async () => {
-      const r = await apiGet<Product[] | { products?: Product[] }>("products", { limit: 500 });
+      const r = await apiGet<Product[] | { products?: Product[]; items?: Product[] }>("products", { limit: 500 });
       const d = r.data as any;
-      return (Array.isArray(d) ? d : d?.products || []) as Product[];
+      return (Array.isArray(d) ? d : d?.items || d?.products || []) as Product[];
     },
     enabled: ready,
   });

@@ -11,10 +11,12 @@ export const Route = createFileRoute("/admin/customers")({
 });
 
 interface Customer {
-  id: string;
+  id?: string;
+  customerId?: string;
   name: string;
   email?: string;
   phone?: string;
+  orders?: number;
   totalOrders?: number;
   totalSpent?: number;
   createdAt?: string;
@@ -26,9 +28,9 @@ function AdminCustomers() {
   const { data, isLoading, refetch } = useQuery({
     queryKey: ["admin", "customers", q],
     queryFn: async () => {
-      const r = await apiGet<Customer[] | { customers?: Customer[] }>("customers", { q: q || undefined, limit: 200 });
+      const r = await apiGet<Customer[] | { customers?: Customer[]; items?: Customer[] }>("customers", { q: q || undefined, limit: 200 });
       const d = r.data as any;
-      return (Array.isArray(d) ? d : d?.customers || []) as Customer[];
+      return (Array.isArray(d) ? d : d?.items || d?.customers || []) as Customer[];
     },
     enabled: ready,
   });
@@ -51,17 +53,25 @@ function AdminCustomers() {
             </thead>
             <tbody className="divide-y divide-border">
               {isLoading && <tr><td colSpan={7} className="p-8 text-center text-muted-foreground">Loading…</td></tr>}
-              {data?.map((c) => (
-                <tr key={c.id}>
-                  <td className="p-3 font-medium">{c.name}</td>
-                  <td className="p-3">{c.email || "—"}</td>
-                  <td className="p-3">{c.phone || "—"}</td>
-                  <td className="p-3">{c.totalOrders ?? 0}</td>
-                  <td className="p-3">{formatNaira(c.totalSpent ?? 0)}</td>
-                  <td className="p-3 text-muted-foreground">{c.createdAt || "—"}</td>
-                  <td className="p-3"><button onClick={() => del(c.id)} className="p-1.5 rounded hover:bg-destructive/10 text-destructive"><Trash2 className="h-4 w-4" /></button></td>
-                </tr>
-              ))}
+              {data?.map((c) => {
+                const id = c.customerId || c.id || "";
+                const ordersCount = c.orders ?? c.totalOrders ?? 0;
+                return (
+                  <tr key={id}>
+                    <td className="p-3 font-medium">{c.name}</td>
+                    <td className="p-3">{c.email || "—"}</td>
+                    <td className="p-3">{c.phone || "—"}</td>
+                    <td className="p-3">{ordersCount}</td>
+                    <td className="p-3">{formatNaira(c.totalSpent ?? 0)}</td>
+                    <td className="p-3 text-muted-foreground">{c.createdAt || "—"}</td>
+                    <td className="p-3">
+                      <button onClick={() => del(id)} className="p-1.5 rounded hover:bg-destructive/10 text-destructive">
+                        <Trash2 className="h-4 w-4" />
+                      </button>
+                    </td>
+                  </tr>
+                );
+              })}
               {data && data.length === 0 && <tr><td colSpan={7} className="p-8 text-center text-muted-foreground">No customers.</td></tr>}
             </tbody>
           </table>

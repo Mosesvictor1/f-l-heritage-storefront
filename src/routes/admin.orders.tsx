@@ -2,7 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
 import { toast } from "sonner";
-import { X } from "lucide-react";
+import { X, MessageCircle } from "lucide-react";
 import { AdminLayout, useAdminGuard } from "@/components/AdminLayout";
 import { apiGet, apiPost, formatNaira } from "@/lib/api";
 
@@ -30,6 +30,17 @@ interface Order {
 const PAY = ["Awaiting Payment", "Receipt Uploaded", "Paid", "Failed"];
 const STATUS = ["Pending", "Processing", "Shipped", "Delivered", "Cancelled"];
 
+function getWhatsappLink(phone: string | number | undefined): string {
+  if (!phone) return "";
+  let clean = String(phone).replace(/\D/g, "");
+  if (clean.startsWith("0")) {
+    clean = "234" + clean.slice(1);
+  } else if (clean.length === 10 && (clean.startsWith("7") || clean.startsWith("8") || clean.startsWith("9"))) {
+    clean = "234" + clean;
+  }
+  return `https://wa.me/${clean}`;
+}
+
 function AdminOrders() {
   const ready = useAdminGuard();
   const [orderStatus, setOrderStatus] = useState("");
@@ -40,14 +51,14 @@ function AdminOrders() {
   const { data, isLoading, refetch } = useQuery({
     queryKey: ["admin", "orders", orderStatus, paymentStatus, q],
     queryFn: async () => {
-      const r = await apiGet<Order[] | { orders?: Order[] }>("orders", {
+      const r = await apiGet<Order[] | { orders?: Order[]; items?: Order[] }>("orders", {
         orderStatus: orderStatus || undefined,
         paymentStatus: paymentStatus || undefined,
         q: q || undefined,
         limit: 200,
       });
       const d = r.data as any;
-      return (Array.isArray(d) ? d : d?.orders || []) as Order[];
+      return (Array.isArray(d) ? d : d?.items || d?.orders || []) as Order[];
     },
     enabled: ready,
   });
@@ -114,7 +125,19 @@ function AdminOrders() {
               <button onClick={() => setSelected(null)} className="p-2 rounded-full hover:bg-muted"><X className="h-5 w-5" /></button>
             </div>
             <div className="mt-6 space-y-3 text-sm">
-              <p><b>{selected.customerName}</b></p>
+              <div className="flex items-center justify-between flex-wrap gap-2">
+                <p><b>{selected.customerName}</b></p>
+                {selected.phone && (
+                  <a
+                    href={getWhatsappLink(selected.phone)}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="inline-flex items-center gap-1.5 rounded-full bg-green-600 hover:bg-green-700 text-white px-3 py-1 text-xs font-semibold shadow-sm transition"
+                  >
+                    <MessageCircle className="h-3.5 w-3.5" /> WhatsApp
+                  </a>
+                )}
+              </div>
               <p className="text-muted-foreground">{selected.email} • {selected.phone}</p>
               <p className="text-muted-foreground">{selected.address}, {selected.city}, {selected.state}</p>
               {selected.notes && <p className="italic text-muted-foreground">Note: {selected.notes}</p>}

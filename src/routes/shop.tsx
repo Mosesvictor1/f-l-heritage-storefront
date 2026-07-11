@@ -36,16 +36,16 @@ function ShopPage() {
     queryKey: ["products", "list", search],
     queryFn: async () => {
       try {
-        const r = await apiGet<Product[] | { products?: Product[] }>("products", {
+        const r = await apiGet<Product[] | { products?: Product[]; items?: Product[] }>("products", {
           style: search.style,
           category: search.category,
           q: search.q,
           sort: search.sort,
         });
-        const d = r.data as unknown;
+        const d = r.data as any;
         const list = Array.isArray(d)
           ? (d as Product[])
-          : ((d as { products?: Product[] } | null | undefined)?.products ?? []);
+          : (d?.items || d?.products || []) as Product[];
         return list;
       } catch {
         return [] as Product[];

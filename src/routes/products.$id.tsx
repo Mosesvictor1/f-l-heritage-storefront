@@ -36,8 +36,17 @@ function ProductPage() {
     queryKey: ["product", id],
     queryFn: async () => {
       try {
-        const r = await apiGet<Product>("products", { id });
-        if (r?.data) return r.data as Product;
+        const r = await apiGet<any>("products", { id });
+        if (r?.data) {
+          const d = r.data;
+          if (d.items && Array.isArray(d.items)) {
+            return d.items[0] as Product;
+          }
+          if (Array.isArray(d)) {
+            return d[0] as Product;
+          }
+          return d as Product;
+        }
       } catch {
         // fall through to demo fallback
       }
